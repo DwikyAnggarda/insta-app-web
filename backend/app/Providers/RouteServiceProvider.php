@@ -28,6 +28,19 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        // ✅ Rate limiter tambahan untuk posting & komentar
+        RateLimiter::for('post_comment', function (Request $request) {
+            return [
+                // Maksimal 10 request per menit per user/IP
+                Limit::perMinute(10)->by($request->user()?->id ?: $request->ip())
+                    ->response(function () {
+                        return response()->json([
+                            'message' => 'Terlalu banyak aktivitas dalam waktu singkat. Coba lagi nanti.'
+                        ], 429);
+                    }),
+            ];
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
