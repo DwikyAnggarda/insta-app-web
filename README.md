@@ -457,6 +457,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## Screenshots
+
+- https://github.com/DwikyAnggarda/insta-app-web/blob/main/frontend/ss-1.png
+- https://github.com/DwikyAnggarda/insta-app-web/blob/main/frontend/ss-2.png
+- https://github.com/DwikyAnggarda/insta-app-web/blob/main/frontend/ss-3.png
+
+---
+
 ## 🙏 Acknowledgments
 
 - Inspired by Instagram
