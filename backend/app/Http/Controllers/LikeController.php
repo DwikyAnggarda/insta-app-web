@@ -7,21 +7,24 @@ use App\Models\Post;
 
 class LikeController extends Controller
 {
-    public function toggle(Request $req, Post $post) {
+    public function toggle(Request $req, Post $post)
+    {
         $user = $req->user();
-        $existing = $post->likes()->where('user_id', $user->id)->first();
 
-        if ($existing) {
-            $existing->delete();
-            $liked = false;
-        } else {
-            $post->likes()->create(['user_id' => $user->id]);
-            $liked = true;
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $like = $post->likes()->firstOrCreate(['user_id' => $user->id]);
+        $liked = $like->wasRecentlyCreated;
+
+        if (!$liked) {
+            $like->delete();
         }
 
         return response()->json([
             'liked' => $liked,
-            'likes_count' => $post->likes()->count()
+            'likes_count' => $post->likes()->count(),
         ]);
     }
 }
