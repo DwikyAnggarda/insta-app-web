@@ -15,9 +15,14 @@ class PostController extends Controller
      */
     public function index(Request $req)
     {
-        $posts = Post::with(['user', 'comments.user'])
+        $posts = Post::with(['user', 'comments.user', 'likes'])
+            ->withCount('likes')
             ->latest()
             ->paginate(10);
+        
+        // return response()->json([
+        //     'auth()->user()->id' => $req->user()
+        // ]);
 
         return PostResource::collection($posts);
     }
@@ -27,7 +32,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->load(['user', 'comments.user']);
+        $post->load(['user', 'comments.user', 'likes']);
+        $post->loadCount('likes');
         return new PostResource($post);
     }
 
@@ -63,7 +69,8 @@ class PostController extends Controller
         }
 
         $post->save();
-        $post->load(['user', 'comments.user']);
+        $post->load(['user', 'comments.user', 'likes']);
+        $post->loadCount('likes');
 
         // JSON Response terstruktur (supaya test lulus)
         return response()->json([
@@ -105,7 +112,8 @@ class PostController extends Controller
         }
 
         $post->save();
-        $post->load(['user', 'comments.user']);
+        $post->load(['user', 'comments.user', 'likes']);
+        $post->loadCount('likes');
 
         // return new PostResource($post);
         return response()->json([
