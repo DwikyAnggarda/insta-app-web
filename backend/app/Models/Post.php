@@ -11,6 +11,13 @@ class Post extends Model
 
     protected $fillable = ['user_id','body','image_path','visibility'];
 
+    public static function booted()
+    {
+        static::deleting(function ($post) {
+            $post->comments()->delete();
+        });
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

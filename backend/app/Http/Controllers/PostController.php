@@ -107,6 +107,7 @@ class PostController extends Controller
         $post->save();
         $post->load(['user', 'comments.user']);
 
+        // return new PostResource($post);
         return response()->json([
             'message' => 'Post updated successfully',
             'post' => new PostResource($post),
